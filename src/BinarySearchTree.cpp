@@ -145,7 +145,11 @@ Node* BinarySearchTree::find_min_(Node* node) const {
     // TODO: Implement find_min_
     //   - Walk left until there is no left child
     //   - Return that node (it holds the minimum value)
-    return nullptr;
+
+    while (node->left)
+        node = node->left;
+
+    return node;
 }
 
 // =============================================================================
@@ -198,5 +202,41 @@ Node* BinarySearchTree::remove_(Node* node, int value, bool& removed) {
     //         c. recursively remove the successor from the right subtree
     //
     //   Return node at the end
-    return nullptr;
+
+    if (!node) return nullptr;
+
+    if (value < node->data)
+        node->left = remove_(node->left, value, removed);
+    else if (value > node->data)
+        node->right = remove_(node->right, value, removed);
+    else
+    {
+        removed = true;
+
+        if (!node->left && !node->right)
+        {
+            delete node;
+            return nullptr;
+        }
+
+        if (!node->left)
+        {
+            Node* child = node->right;
+            delete node;
+            return child;
+        }
+
+        if (!node->right)
+        {
+            Node* child = node->right;
+            delete node;
+            return child;
+        }
+
+        Node* successor = find_min_(node->right);
+        node->data = successor->data;
+        node->right = remove_(node->right, successor->data, removed);
+    }
+
+    return node;
 }
