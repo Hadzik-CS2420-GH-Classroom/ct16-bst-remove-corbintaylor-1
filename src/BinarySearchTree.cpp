@@ -228,7 +228,7 @@ Node* BinarySearchTree::remove_(Node* node, int value, bool& removed) {
 
         if (!node->right)
         {
-            Node* child = node->right;
+            Node* child = node->left;
             delete node;
             return child;
         }
